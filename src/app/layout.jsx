@@ -1,0 +1,1 @@
+import './globals.css'; export const metadata={title:'ZenVoraX — From Garage to Globe'}; export default function RootLayout({children}){return(<html lang='en'><body>{children}</body></html>)}

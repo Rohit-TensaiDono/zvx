@@ -1,0 +1,1 @@
+export default function ProductCard({title,subtitle,icon}){return(<article className='card p-5'><div className='flex items-start gap-4'><div className='w-12 h-12 rounded bg-white/6 grid place-items-center'>{icon}</div><div><h3 className='text-lg font-semibold'>{title}</h3><p className='text-sm text-white/70 mt-2'>{subtitle}</p></div></div></article>)}

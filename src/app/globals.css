@@ -1,0 +1,6 @@
+@tailwind base;@tailwind components;@tailwind utilities;
+:root{--zbg:#0B0B0C;--zgold1:#D4A73C;--zgold2:#F0C85A;--zred1:#D43C2F;--zred2:#F04D3A}
+html,body{height:100%}body{background:var(--zbg);color:#fff;font-family:Inter,system-ui;}
+.brand-gold{background:linear-gradient(90deg,var(--zgold1),var(--zgold2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.cta-gold{background:linear-gradient(90deg,var(--zgold1),var(--zgold2));color:#0B0B0C;padding:.6rem 1rem;border-radius:10px;display:inline-block;font-weight:600}
+.card{border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);padding:1rem}
