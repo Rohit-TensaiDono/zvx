@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --zbg: #0B0B0C;
+  --zgold1: #D4A73C;
+  --zgold2: #F0C85A;
+  --zred1: #D43C2F;
+  --zred2: #F04D3A;
+  --zblue: #3BAAFF;
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--zbg); color: #fff; font-family: 'Inter', system-ui; -webkit-font-smoothing: antialiased; }
+
+/* Range input accent across browsers */
+input[type="range"] { -webkit-appearance: none; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.1); }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #F0C85A; cursor: pointer; border: 2px solid #0B0B0C; }
+input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #F0C85A; cursor: pointer; border: 2px solid #0B0B0C; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0B0B0C; }
+::-webkit-scrollbar-thumb { background: rgba(240,200,90,0.3); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(240,200,90,0.5); }
+
+.brand-gold { background: linear-gradient(90deg, var(--zgold1), var(--zgold2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* ─── Section transparency layers ──────────────────────────────────────
+   The Three.js mesh is position:fixed behind everything.
+   Sections must NOT be fully opaque or the mesh is invisible.
+   Use these classes instead of bg-[#0B0B0C] on sections.
+   ─────────────────────────────────────────────────────────────────── */
+
+/* Hero: fully transparent — mesh shows at full strength */
+.section-hero {
+  background: transparent;
+}
+
+/* Main content sections: dark but mesh glows faintly through */
+.section-dark {
+  background: rgba(11, 11, 12, 0.86);
+}
+
+/* Alternate sections: slightly more transparent for visual rhythm */
+.section-mid {
+  background: rgba(13, 18, 25, 0.82);
+}
+
+/* Cards and surfaces: keep solid so content stays readable */
+.card-surface {
+  background: rgba(26, 26, 28, 0.95);
+}
