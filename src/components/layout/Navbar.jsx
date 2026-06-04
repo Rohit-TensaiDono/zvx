@@ -12,7 +12,7 @@ export default function Navbar() {
   const [prodOpen, setProdOpen]     = useState(false);
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 20);
+    const fn = () => setScrolled(window.scrollY < 60);
     window.addEventListener('scroll', fn, { passive: true });
     return () => window.removeEventListener('scroll', fn);
   }, []);
@@ -20,11 +20,11 @@ export default function Navbar() {
   return (
     <>
       <motion.nav
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled ? 'bg-[#0B0B0C]/90 backdrop-blur-xl border-b border-white/[0.06] shadow-2xl' : 'bg-transparent'
+        initial={{ y: -30, opacity: 0 }}
+        animate={{ y: 0, opacity: scrolled ? 1 : 0.96 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-out ${
+          scrolled ? 'bg-[#0B0B0C]/90 backdrop-blur-xl shadow-2xl' : 'bg-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
