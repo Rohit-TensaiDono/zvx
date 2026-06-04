@@ -93,7 +93,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="fixed top-16 left-0 right-0 z-40 bg-[#0B0B0C]/95 backdrop-blur-xl border-b border-white/[0.06] md:hidden overflow-hidden"
+            className="fixed top-16 left-0 right-0 z-40 bg-[#0B0B0C]/95 backdrop-blur-xl md:hidden overflow-hidden"
           >
             <div className="px-4 py-4 flex flex-col gap-1">
               {productDropdown.map(p => (
