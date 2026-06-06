@@ -68,3 +68,5 @@ temp/
 *.pid
 *.seed
 *.pid.lock
+
+settings.local.json
