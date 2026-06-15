@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base ─────────────────────────────────────────────── */
+html  { scroll-behavior: smooth; }
+body  {
+  cursor: none;
+  background: #0B0B0C;
+  color: #fff;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar-track { background: #0B0B0C; }
+::-webkit-scrollbar-thumb { background: rgba(240,200,90,0.25); border-radius: 4px; }
+
+/* ── Range input ──────────────────────────────────────── */
+input[type="range"]                       { -webkit-appearance:none; height:3px; border-radius:3px; background:rgba(255,255,255,0.12); }
+input[type="range"]::-webkit-slider-thumb{ -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:#F0C85A; cursor:pointer; border:2px solid #0B0B0C; }
+input[type="range"]::-moz-range-thumb     { width:14px; height:14px; border-radius:50%; background:#F0C85A; cursor:pointer; border:2px solid #0B0B0C; }
+
+/* ────────────────────────────────────────────────────────
+   LAYER SYSTEM
+   Z0  Three.js mesh      position:fixed, z-index 0
+   Z1  Scroll scrim       position:fixed, z-index 1  (vignettes)
+   Z2  Section content    position:relative, z-index 10
+   Z50 Navbar             position:fixed, z-index 50
+   ──────────────────────────────────────────────────────── */
+
+/* All sections sit on the transparent canvas.
+   NEVER add a solid background to <section> tags.
+   Cards + content blocks use glass-card / glass-surface. */
+
+/* ── Glass surfaces (reading contrast on the mesh) ─────── */
+.glass-card {
+  background: rgba(20, 20, 24, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.glass-surface {
+  background: rgba(26, 26, 30, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Inner content backdrops — local dark halo behind text blocks */
+.text-halo {
+  position: relative;
+}
+.text-halo::before {
+  content: '';
+  position: absolute;
+  inset: -32px -48px;
+  background: radial-gradient(ellipse at center, rgba(11,11,12,0.72) 0%, transparent 75%);
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 50%;
+}
+
+/* Section base — transparent, just provides spacing */
+.section {
+  position: relative;
+  z-index: 10;
+  padding-top: 4rem;
+  padding-bottom: 5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media(min-width:768px) {
+  .section { padding-top: 5rem; padding-bottom: 6rem; }
+}
+
+/* Gradient bridge — connects section bottom to next section top */
+.section-bridge {
+  position: relative;
+  z-index: 10;
+  height: 6rem;
+  pointer-events: none;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(11,11,12,0.0) 100%);
+}
+
+/* card-surface kept for existing card components */
+.card-surface {
+  background: rgba(26, 26, 28, 0.92);
+}
+
+/* Will-change hints for animated elements */
+.motion-gpu {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* ── Mechanical card animations ─────────────────────────── */
+
+/* Border orbit — conic gradient rotates around card */
+@property --card-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes card-orbit {
+  to { --card-angle: 360deg; }
+}
+
+/* Scan line sweep — horizontal line crosses the card */
+@keyframes scan-sweep {
+  0%   { transform: translateY(-80px);  opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 0.6; }
+  100% { transform: translateY(200px);  opacity: 0; }
+}
+
+/* Corner reticle dot pulse */
+@keyframes reticle-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(240,200,90,0); }
+  50%       { box-shadow: 0 0 0 4px rgba(240,200,90,0.15); }
+}
+
+/* ── Link / text shimmer ─────────────────────────────────── */
+@keyframes text-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    currentColor 0%,
+    #ffffff 40%,
+    #F0C85A 50%,
+    currentColor 60%,
+    currentColor 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.group\/alink:hover .shimmer-text {
+  animation: text-shimmer 0.7s ease-out forwards;
+}
+
+/* ── Stat counter animation ─────────────────────────────── */
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.stat-animate { animation: count-up 0.5s ease-out both; }
+
+/* ── Mesh breathe sync helper ───────────────────────────────
+   Content that fades in should feel like it's emerging from
+   mesh nodes. The 180ms delay in RevealSection is the timing
+   anchor — content appears as the camera starts its inhale.
+
+   These are the raw CSS classes used by RevealItem variants
+   when Framer Motion isn't available (progressive enhancement).  */
+
+.from-mesh {
+  opacity: 0;
+  transform: translateY(28px);
+  filter: blur(3px);
+  transition: opacity 0.68s cubic-bezier(0.16,1,0.3,1),
+              transform 0.68s cubic-bezier(0.16,1,0.3,1),
+              filter 0.68s cubic-bezier(0.16,1,0.3,1);
+}
+.from-mesh.visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Bottom-of-hero gradient bridge — merges hero into next section */
+.hero-bridge {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(11,11,12,0.55) 68%,
+    rgba(11,11,12,0.84) 100%
+  );
+}
+
+/* Hide native cursor everywhere — CustomCursor takes over */
+*, *::before, *::after { cursor: none !important; }
+
+/* ── Section header word animations ─────────────────────────────
+   Used by SectionHeader — CSS keyframes fire reliably regardless
+   of parent opacity state, unlike Framer whileInView.           */
+@keyframes wordSlideUp {
+  from { transform: translateY(110%); opacity: 0; filter: blur(4px); }
+  to   { transform: translateY(0);    opacity: 1; filter: blur(0);   }
+}
+@keyframes fadeSlideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
