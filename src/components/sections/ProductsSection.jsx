@@ -30,11 +30,24 @@ function RVAKCard({ product }) {
       >
         {/* Themed header with product colour gradient */}
         <div className="relative h-44 overflow-hidden">
-          {product.image ? (
+          {product.video ? (
+            <video
+              src={product.video}
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="w-full h-full object-cover opacity-55
+                        group-hover/mcard:opacity-85 group-hover/mcard:scale-105
+                        transition-all duration-500"
+              onMouseEnter={e => e.currentTarget.play()}
+              onMouseLeave={e => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}
+            />
+          ) : product.image ? (
             <img src={product.image} alt={product.name}
               className="w-full h-full object-cover opacity-55
-                         group-hover/mcard:opacity-80 group-hover/mcard:scale-105
-                         transition-all duration-500" />
+                        group-hover/mcard:opacity-80 group-hover/mcard:scale-105
+                        transition-all duration-500" />
           ) : (
             <div className="w-full h-full flex items-center justify-center"
               style={{ background:`radial-gradient(circle at 50% 60%, ${product.colorDim} 0%, rgba(14,14,16,.97) 72%)` }}>
