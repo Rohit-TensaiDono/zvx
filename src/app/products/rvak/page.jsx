@@ -10,6 +10,7 @@ const products = [
     desc: 'The entry-level R-VAK experience — lightweight frames with crystal-clear audio and always-on AI voice assistant. Built for everyday professionals who want smarter audio without screen distraction.',
     specs: [['Form Factor','Lightweight wraparound frame'],['Audio','Dual speaker + directional mic array'],['AI','Voice-activated edge inference'],['Connectivity','Bluetooth 5.2, USB-C'],['Battery','12hr continuous, 20hr standby'],['Weight','32g'],],
     image: '/images/rvak.jpg',
+    video: '/videos/astral.mp4',          // ← ADD THIS
   },
   {
     id: 'spectral', name: 'R-VAK Spectral', tier: 'Mid Range', icon: Camera, color: '#D43C2F',
@@ -17,6 +18,7 @@ const products = [
     desc: 'Spectral adds a high-resolution camera array to the Astral foundation. Real-time object recognition, live scene analysis, and AI-powered visual assistance — hands-free, always-on.',
     specs: [['Camera','12MP wide + depth sensor'],['AI','On-device visual inference, INT8'],['Display','Side OLED notification strip'],['Connectivity','BT 5.2, WiFi 6, USB-C'],['Battery','8hr active, 16hr standby'],['Weight','41g'],],
     image: '/images/rvak-banner.jpg',
+    video: '/videos/spectral.mp4',         // ← ADD THIS
   },
   {
     id: 'orion', name: 'R-VAK Orion', tier: 'Flagship', icon: Glasses, color: '#3BAAFF',
@@ -25,6 +27,7 @@ const products = [
     specs: [['Display','Binocular AR waveguide, 40° FOV'],['Camera','4K + depth + IR array'],['Processor','Custom NPU, 12 TOPS'],['Connectivity','BT 5.3, WiFi 6E, UWB'],['Battery','6hr AR-active, 14hr standby'],['Weight','58g'],],
     image: '/images/rvak.jpg',
     badge: 'Coming Soon',
+    video: '/videos/orion.mp4',            // ← ADD THIS
   },
   {
     id: 'athena', name: 'R-VAK Athena', tier: 'Smart Pen', icon: Pencil, color: '#c0c0c0',
@@ -33,6 +36,7 @@ const products = [
     specs: [['Tracking','6-axis IMU gyroscope'],['Sync','BLE 5.2, sub-100ms latency'],['Ink','Universal replaceable ballpoint cartridge'],['Battery','3-month CR2016 coin cell'],['Companion App','Android & iOS (coming)'],['Weight','14g'],],
     image: null,
     badge: 'Prototype',
+    video: '/videos/athena.mp4',           // ← ADD THIS
   },
 ];
 
@@ -66,17 +70,28 @@ export default function RVAKPage() {
                 className="rounded-2xl overflow-hidden border border-white/[0.07] bg-gradient-to-br from-[#1a1a1c] to-[#111114] hover:border-white/[0.13] transition-all"
               >
                 <div className={`grid md:grid-cols-2 ${i % 2 === 1 ? 'md:[&>*:first-child]:order-2' : ''}`}>
-                  {/* Image */}
-                  <div className="relative h-56 md:h-auto min-h-[220px] overflow-hidden">
-                    {p.image ? (
-                      <img src={p.image} alt={p.name} className="w-full h-full object-cover opacity-60" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center"
-                        style={{ background:`radial-gradient(circle at 50% 50%, ${p.color}15 0%, #111114 70%)` }}>
-                        <Icon className="w-20 h-20 opacity-20" style={{ color:p.color }} />
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#111114]" />
+                  {/* Image / Video */}
+                    <div className="relative h-56 md:h-auto min-h-[220px] overflow-hidden group">
+                      {p.video ? (
+                        <video
+                          src={p.video}
+                          muted
+                          loop
+                          playsInline
+                          preload="metadata"
+                          className="w-full h-full object-cover opacity-60 group-hover:opacity-85 transition-opacity duration-500"
+                          onMouseEnter={(e) => e.currentTarget.play()}
+                          onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}
+                        />
+                      ) : p.image ? (
+                        <img src={p.image} alt={p.name} className="w-full h-full object-cover opacity-60" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center"
+                          style={{ background:`radial-gradient(circle at 50% 50%, ${p.color}15 0%, #111114 70%)` }}>
+                          <Icon className="w-20 h-20 opacity-20" style={{ color:p.color }} />
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#111114] pointer-events-none" />
                     <div className="absolute top-4 left-4 flex gap-2">
                       <span className="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase"
                         style={{ background:`${p.color}22`, color:p.color, border:`1px solid ${p.color}44` }}>
